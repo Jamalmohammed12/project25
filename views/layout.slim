@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+html lang="en"
+    head
+        meta charset="UTF-8"/
+        meta name="viewport" content="width=device-width, initial-scale=1.0"/
+        link rel="stylesheet" href="/css/style.css"/
+        title Document
+    body 
+
+        header
+            -if session[:saver] !=nil 
+                    h1 Välkommen #{session[:saver]}
+            -else
+                    h1 Välkommen (ej inloggad)
+
+            nav 
+                ul 
+                    li a href="/register" 
+                    li a href="asdasdsad" 
+                    li a href="jasdajkas" 
+
+            
+        y
+               
+        section 
+            ==yield 
