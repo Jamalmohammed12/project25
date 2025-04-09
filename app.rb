@@ -62,3 +62,6 @@ post '/delete_advertisement' do
 
   redirect '/'
 end
+
+
+# dasdasda
