@@ -1,0 +1,30 @@
+section 
+  h2 Skapa en ny annons
+
+  form action="/create_advertisement" method="post"
+    .form-group
+      label for="title" Titel:
+      input type="text" id="title" name="title" Måste fyllas i
+
+    .form-group
+      label for="description" Beskrivning:
+      textarea id="description" name="description" rows="4" Måste fyllas i
+
+    .form-group
+      label for="price" Pris:
+      input type="number" id="price" name="price" Måste fyllas i
+
+    .form-group
+      label for="brand" Märke:
+      input type="text" id="brand" name="brand" Måste fyllas i
+
+    .form-group
+      label for="model" Modell:
+      input type="text" id="model" name="model" Måste fyllas i
+
+    .form-group
+      label for="picture" Bild-URL:
+      input type="text" id="picture" name="picture"
+
+    .form-group
+      button type="submit" Skapa annons

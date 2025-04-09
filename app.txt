@@ -1,0 +1,51 @@
+require 'sinatra'
+require 'slim'
+require 'sqlite3'
+require 'sinatra/reloader'
+require 'bcrypt'
+
+
+# enable :sessions
+# output = []
+
+# Database connection
+DB = SQLite3::Database.new "db/Tabeller.db" # or your database file
+DB.results_as_hash = true
+
+get('/') do
+  get('/') do
+    begin
+      @advertisements = DB.execute("SELECT
+        a.Id,
+        a.price,
+        a.tiltle,
+        a.picture,
+        c.brand,
+        c.modell
+      FROM
+        Advertisment a
+      JOIN
+        Cars c ON a.Id = c.Id
+      ORDER BY
+        a.Id DESC")
+      puts "@advertisements: #{@advertisements.inspect}" # Add this line
+      slim :index
+    rescue SQLite3::Exception => e
+      puts "Database error: #{e.message}"
+      halt 500, "Internal Server Error"
+    end
+  end
+end
+
+get('/Advertisement') do
+  slim :Advertisement
+end
+
+get('/loggin') do
+  slim :loggin
+end
+
+
+
+
+

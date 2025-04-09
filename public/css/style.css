@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1500ff;
+    background-color: #ffffff;
   }
   
   header {
@@ -69,8 +69,10 @@ body {
   }
   
   .car-card img {
-    max-width: 100%;
+    max-width: 100%;     /* Gör att bilden aldrig blir bredare än kortet */
+    height: 200px;        /* Bevarar bildens proportioner */
     border-radius: 5px;
+    object-fit: cover; /* Gör så att bilden fyller hela utrymmet utan att förvrängas */
   }
   
   .car-card a {
@@ -80,3 +82,80 @@ body {
     text-decoration: none;
     font-weight: bold;
   }
+
+  btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Styling för formuläret 'Skapa en ny annons' */
+
+/* Stilar för hela formuläret (om du vill ha marginal, maxbredd etc) */
+form {
+  max-width: 500px; /* Sätter en maxbredd så det inte blir för brett */
+  margin: 20px auto; /* Centrerar formuläret och ger marginal upp/ner */
+  padding: 20px;
+  background-color: #f9f9f9; /* Ljus bakgrund för formuläret */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Stilar för varje grupp av etikett och fält */
+.form-group {
+  margin-bottom: 15px; /* Lägger till utrymme mellan varje fält-grupp */
+}
+
+/* Stilar för etiketterna (labels) */
+.form-group label {
+  display: block; /* Gör så att etiketten tar upp en hel rad */
+  margin-bottom: 5px; /* Lite utrymme mellan etikett och fält */
+  font-weight: bold;
+}
+
+/* Stilar för input-fält och textarea */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+  display: block; /* Gör så att fältet tar upp en hel rad */
+  width: 100%; /* Gör fältet så brett som möjligt inom formuläret */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Viktigt så padding inte ökar total bredd */
+}
+
+/* Stilar för knappen (om du vill) */
+form button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+input, textarea, button {
+  width: 300px;
+  padding: 8px;
+  font-size: 1em;
+}
