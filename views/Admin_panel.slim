@@ -1,0 +1,21 @@
+h1 Adminpanel
+
+table
+  thead
+    tr
+      th ID
+      th Användarnamn
+      th Roll
+      th Åtgärder
+  tbody
+    - @users.each do |user|
+      tr
+        td = user["id"]
+        td = user["Username"]
+        td = user["Role"].to_i == 1 ? "Admin" : "Användare"
+        td
+          form action="/admin_panel/#{user["id"]}/toggle_role" method="post" style="display:inline"
+            button Byt roll
+          - unless user["id"].to_i == session[:user_id].to_i
+            form action="/admin_panel/#{user["id"]}/delete" method="post" style="display:inline"
+              button onclick="return confirm('Är du säker på att du vill ta bort denna användare?')" Ta bort

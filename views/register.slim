@@ -1,6 +1,6 @@
-h2 Logga in
+h2 Skapa konto
 
-form action="/loggin" method="post"
+form action="/register" method="post"
   .form-group
     label for="username" Användarnamn:
     input type="text" name="username" id="username" required
@@ -9,8 +9,8 @@ form action="/loggin" method="post"
     label for="password" Lösenord:
     input type="password" name="password" id="password" required
 
-  button type="submit" Logga in
+  button type="submit" Registrera
 
 p
-  | Har du inget konto?
-  a href="/register" Registrera dig här
+  | Har du redan ett konto?
+  a href="/loggin" Logga in här

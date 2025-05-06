@@ -159,3 +159,13 @@ input, textarea, button {
   padding: 8px;
   font-size: 1em;
 }
+
+.logged-in-user {
+  color: #00b894;        /* ljusgrön */
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 1rem;
+}
+.logged-in-user b {
+  color: #0984e3;         /* blå färg på namnet */
+}

@@ -3,19 +3,17 @@ h1 Car Advertisements
 section.cars
   h2 Tillgängliga annonser
 
+  - @ads.each do |ad|
+    .car-card
+      img src=ad['picture'] alt="Bild på bilen"
+      h3 = "#{ad['brand']} #{ad['model']}"
+      p = ad['title']
+      p = ad['description']
+      p Pris: #{ad['price']} SEK
+      p Skapad av: #{ad['Username']}
 
-- @ads.each do |ad|
-  .car-card
-    img src=ad['picture'] alt="Bild på bilen"
-    h3 = "#{ad['brand']} #{ad['model']}"
-    p = ad['title']
-    p = ad['description']
-    p Pris: #{ad['price']} SEK
+      form action="/advertisements/#{ad['Id']}" method="post"
+        input type="hidden" name="_method" value="delete"
+        button type="submit" Ta bort annons
 
-    form action="/delete_advertisement" method="post"
-      input type="hidden" name="id" value=ad['Id']
-      button type="submit" Ta bort annons
-
-
-      
-
+      a href="/advertisements/#{ad['Id']}/edit" Redigera annons

@@ -1,27 +1,39 @@
-<!DOCTYPE html>
+doctype html 
 html lang="en"
-    head
-        meta charset="UTF-8"/
-        meta name="viewport" content="width=device-width, initial-scale=1.0"/
-        link rel="stylesheet" href="/css/style.css"/
-        title Document                                  
-    body 
+  head
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    link rel="stylesheet" href="/css/style.css"
+    title Dokument
 
+  body
     header
       nav
         ul
           li
             a href="/" Hem
           li
-            a href="/Advertisement" skapa anonser
-          li
-            a href="/loggin" Logga in
-    
+            a href="/advertisements/new" Skapa annonser
+          - if logged_in?
+            li.logged-in-user
+              | Inloggad som 
+              b = current_user["Username"]
+            li
+              a href="/logout" Logga ut
+            - if admin?
+              li
+                a href="/admin_panel" Adminpanel
+          - else
+            li
+              a href="/loggin" Logga in
+            li
+              a href="/register" Registrera dig
+
     main
       section.search
         form action="/search" method="GET"
           input type="text" name="query" placeholder="Sök efter bilmärke..."
           button type="submit" Sök
-    section 
 
-    == yield
+      section
+        == yield

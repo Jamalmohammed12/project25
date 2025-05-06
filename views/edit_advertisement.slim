@@ -1,0 +1,23 @@
+h2 Redigera annons
+
+- if @error
+  p style="color: red;" = @error
+
+form action="/advertisements/#{@ad['Id']}" method="post"
+  input type="hidden" name="_method" value="patch"
+
+  .form-group
+    label for="title" Titel:
+    input type="text" name="title" value=@ad['title'] Måste fyllas i
+
+  .form-group
+    label for="description" Beskrivning:
+    textarea name="description" 
+      = @ad['description']
+    | Måste fyllas i
+
+  .form-group
+    label for="price" Pris:
+    input type="text" name="price" value=@ad['price'] Måste fyllas i
+
+  button type="submit" Uppdatera annons
