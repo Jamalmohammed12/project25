@@ -1,19 +1,25 @@
-h1 Car Advertisements
+- @ads.each do |ad|
+  .car-card
+    img src=ad['picture'] alt="Bild på bilen"
+    h3 = "#{ad['brand']} #{ad['model']}"
+    p = ad['title']
+    p = ad['description']
+    p Pris: #{ad['price']} SEK
+    p Skapad av: #{ad['Username']}
 
-section.cars
-  h2 Tillgängliga annonser
-
-  - @ads.each do |ad|
-    .car-card
-      img src=ad['picture'] alt="Bild på bilen"
-      h3 = "#{ad['brand']} #{ad['model']}"
-      p = ad['title']
-      p = ad['description']
-      p Pris: #{ad['price']} SEK
-      p Skapad av: #{ad['Username']}
-
+    - if admin? || ad['user_id'].to_i == session[:user_id]
       form action="/advertisements/#{ad['Id']}" method="post"
         input type="hidden" name="_method" value="delete"
         button type="submit" Ta bort annons
 
       a href="/advertisements/#{ad['Id']}/edit" Redigera annons
+
+    - if logged_in?
+      - if @favorite_ids&.include?(ad['Id'])
+        form action="/favorites/#{ad['Id']}" method="post"
+          input type="hidden" name="_method" value="delete"
+          button type="submit" Ta bort från favoriter
+      - else
+        form action="/favorites" method="post"
+          input type="hidden" name="ad_id" value=ad['Id']
+          button type="submit" Lägg till som favorit

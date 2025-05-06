@@ -24,6 +24,14 @@ helpers do
   def admin?
     current_user && current_user["Role"].to_i == 1
   end
+
+  def find_advertisement(id)
+    DB.execute("SELECT * FROM Advertisement WHERE Id = ?", id).first
+  end
+
+  def find_user(id)
+    DB.execute("SELECT * FROM User WHERE id = ?", id).first
+  end
 end
 
 # Before-filter
@@ -39,6 +47,12 @@ get('/') do
     JOIN Cars ON Advertisement.car_id = Cars.Id
     JOIN User ON Advertisement.user_id = User.id
   ")
+
+  if logged_in?
+    favorite_rows = DB.execute("SELECT ad_id FROM User_ad_relation WHERE user_id = ?", current_user["id"])
+    @favorite_ids = favorite_rows.map { |row| row["ad_id"] }
+  end
+
   slim :index
 end
 
@@ -82,7 +96,7 @@ post '/loggin' do
   username = params[:username]
   password = params[:password]
 
-  user = DB.execute("SELECT * FROM User WHERE Username = ?", [username]).first
+  user = find_user(DB.execute("SELECT id FROM User WHERE Username = ?", [username]).dig(0, 'id'))
 
   if user && BCrypt::Password.new(user['password_digest']) == password
     session[:user_id] = user['id']
@@ -138,7 +152,7 @@ end
 # Ta bort annons
 delete '/advertisements/:id' do
   ad_id = params[:id].to_i
-  ad = DB.execute("SELECT * FROM Advertisement WHERE Id = ?", ad_id).first
+  ad = find_advertisement(ad_id)
 
   if !admin? && ad["user_id"].to_i != session[:user_id].to_i
     halt(403, "Du får inte ta bort denna annons.")
@@ -151,7 +165,7 @@ end
 # Redigera annons – formulär
 get '/advertisements/:id/edit' do
   id = params[:id].to_i
-  @ad = DB.execute("SELECT * FROM Advertisement WHERE Id = ?", id).first
+  @ad = find_advertisement(id)
 
   if @ad.nil?
     halt(404, "Annonsen hittades inte.")
@@ -167,7 +181,7 @@ end
 # Uppdatera annons
 patch '/advertisements/:id' do
   id = params[:id].to_i
-  ad = DB.execute("SELECT * FROM Advertisement WHERE Id = ?", id).first
+  ad = find_advertisement(id)
 
   if ad.nil?
     halt(404, "Annonsen finns inte.")
@@ -211,7 +225,7 @@ post '/admin_panel/:id/toggle_role' do
   halt(403, "Du är inte admin") unless admin?
   user_id = params[:id].to_i
 
-  user = DB.execute("SELECT * FROM User WHERE id = ?", user_id).first
+  user = find_user(user_id)
   halt(404, "Användaren finns inte") unless user
 
   new_role = user["Role"].to_i == 1 ? 0 : 1
@@ -229,4 +243,45 @@ post '/admin_panel/:id/delete' do
   DB.execute("DELETE FROM User WHERE id = ?", user_id)
 
   redirect '/admin_panel'
+end
+
+# Lägg till favorit
+post '/favorites' do
+  halt(403, "Du måste vara inloggad") unless logged_in?
+  ad_id = params[:ad_id].to_i
+  user_id = session[:user_id]
+
+  begin
+    DB.execute("INSERT INTO User_ad_relation (user_id, ad_id) VALUES (?, ?)", [user_id, ad_id])
+  rescue SQLite3::ConstraintException
+    # Redan favorit, inget händer
+  end
+
+  redirect '/'
+end
+
+# Ta bort favorit
+delete '/favorites/:ad_id' do
+  halt(403, "Du måste vara inloggad") unless logged_in?
+  ad_id = params[:ad_id].to_i
+  user_id = session[:user_id]
+
+  DB.execute("DELETE FROM User_ad_relation WHERE user_id = ? AND ad_id = ?", [user_id, ad_id])
+
+  redirect '/'
+end
+
+# Visa favoriter
+get '/favorites' do
+  halt(403, "Du måste vara inloggad") unless logged_in?
+
+  @favorites = DB.execute("
+    SELECT Advertisement.*, Cars.brand, Cars.model
+    FROM User_ad_relation
+    JOIN Advertisement ON User_ad_relation.ad_id = Advertisement.Id
+    JOIN Cars ON Advertisement.car_id = Cars.Id
+    WHERE User_ad_relation.user_id = ?
+  ", [session[:user_id]])
+
+  slim :favorites
 end
